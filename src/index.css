@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   DESIGN SYSTEM — Custom properties & global styles
+   ============================================================ */
+
+@theme {
+  --color-primary-bg: #F5FAFF;
+  --color-secondary-bg: #EAF5FF;
+  --color-primary-blue: #3B82F6;
+  --color-accent-blue: #60A5FA;
+  --color-deep-navy: #102A43;
+  --color-text-primary: #142D4E;
+  --color-text-secondary: #64748B;
+  --color-border: #DCEBFA;
+  --color-white: #FFFFFF;
+  --color-glass: rgba(255, 255, 255, 0.7);
+  --color-glass-border: rgba(220, 235, 250, 0.5);
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* ---- Base ---- */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  background-color: var(--color-primary-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: var(--color-deep-navy);
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-primary-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-blue);
+}
+
+/* ---- Glass utility ---- */
+.glass {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-glass-border);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--color-glass-border);
+}
+
+/* ---- Background grid pattern ---- */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ---- Gradient text ---- */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-primary-blue), var(--color-accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- Glow border ---- */
+.glow-border {
+  box-shadow: 0 0 0 1px var(--color-border), 0 0 20px rgba(59, 130, 246, 0.06);
+}
+
+.glow-border-hover:hover {
+  box-shadow: 0 0 0 1px var(--color-primary-blue), 0 0 30px rgba(59, 130, 246, 0.12);
+}
+
+/* ---- Section spacing ---- */
+.section-padding {
+  padding: 6rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding: 8rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding: 10rem 2rem;
+  }
+}
+
+/* ---- Animated gradient bg ---- */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.animated-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-bg),
+    var(--color-secondary-bg),
+    rgba(59, 130, 246, 0.05),
+    var(--color-primary-bg)
+  );
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+/* ---- Float animation ---- */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 7s ease-in-out 2s infinite;
+}
+
+/* ---- Pulse glow ---- */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.2); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animated-gradient { animation: none; }
+  .animate-float,
+  .animate-float-slow,
+  .animate-float-delayed { animation: none; }
+  .animate-pulse-glow { animation: none; }
+}
+
+/* ---- Magnetic button base ---- */
+.magnetic-btn {
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ---- Timeline connector ---- */
+.timeline-line {
+  background: linear-gradient(to bottom, var(--color-border), var(--color-primary-blue), var(--color-border));
+}
+
