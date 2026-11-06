@@ -1,173 +1,227 @@
 // ============================================================
-// PORTFOLIO DATA — Edit this file to update your portfolio content
+// PORTFOLIO DATA — AJAY MATE
+// Developer Command Centre & Editorial Portfolio
 // ============================================================
 
+import React from 'react';
 import {
-  Code2, Globe, Brain, Wrench, BookOpen,
-  Github, Linkedin, Mail, Instagram,
+  Code2,
+  Globe,
+  Brain,
+  Wrench,
+  BookOpen,
+  Mail,
+  Cpu,
+  Layers,
+  Terminal,
 } from 'lucide-react';
+import { GithubIcon, LinkedinIcon } from '@/components/ui/Icons';
 
 // ---- Personal Info ----
 export const personalInfo = {
-  name: 'Your Name',
-  initials: 'YN',
-  title: 'Computer Science Student',
-  tagline: 'Curious Mind. Creative Builder. Future Engineer.',
+  name: 'Ajay Mate',
+  initials: 'AM',
+  role: 'CSE Student · Aspiring Software Engineer',
+  tagline: 'Learning by building. Exploring systems from first principles.',
   description:
-    "Exploring technology, building ideas, and turning curiosity into something meaningful. Welcome to my digital space.",
-  email: 'your.email@example.com',
+    'Computer Science & Engineering student passionate about algorithmic problem solving, modern web applications, and systems design. Dedicated to writing clean, maintainable code and turning concepts into working software.',
+  email: 'ajaymate@example.com', // Public contact email (placeholder pending confirmation)
   location: 'India',
-  university: 'Your University Name',
-  degree: 'B.Tech in Computer Science & Engineering (AI & ML)',
-  yearOfStudy: '1st Year',
-  resumeUrl: '#', // Replace with your actual resume URL
-  profileImage: '', // Replace with your photo URL
+  university: 'Computer Science & Engineering Department',
+  degree: 'B.Tech in Computer Science & Engineering',
+  yearOfStudy: 'Undergraduate Student',
+  status: 'Available for internships & collaborations',
+  resumeUrl: '', // Left blank to avoid dead link until confirmed
 };
 
-// ---- Social Links ----
+// ---- Social Links (cleanly filtered for valid URLs) ----
 export const socialLinks = [
-  { name: 'GitHub', url: 'https://github.com/yourusername', icon: Github },
-  { name: 'LinkedIn', url: 'https://linkedin.com/in/yourusername', icon: Linkedin },
-  { name: 'Email', url: 'mailto:your.email@example.com', icon: Mail },
-  { name: 'Instagram', url: 'https://instagram.com/yourusername', icon: Instagram },
+  {
+    name: 'GitHub',
+    url: 'https://github.com',
+    icon: GithubIcon,
+    display: true,
+  },
+  {
+    name: 'LinkedIn',
+    url: 'https://linkedin.com',
+    icon: LinkedinIcon,
+    display: true,
+  },
+  {
+    name: 'Email',
+    url: `mailto:${personalInfo.email}`,
+    icon: Mail,
+    display: true,
+  },
 ];
 
 // ---- Navigation ----
 export const navLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Journey', href: '#journey' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'About', href: '#about', id: '01' },
+  { label: 'Projects', href: '#projects', id: '02' },
+  { label: 'Skills', href: '#skills', id: '03' },
+  { label: 'Contact', href: '#contact', id: '04' },
 ];
 
-// ---- About ----
+// ---- About Section Data ----
 export const aboutData = {
   intro:
-    "I'm a first-year Computer Science student specializing in AI & Machine Learning. I believe in learning by building — every project, every experiment, and every line of code is a step toward becoming a better engineer.",
-  approach:
-    "I approach technology with curiosity and creativity. I don't just learn concepts — I build things with them. From web applications to AI experiments, I love turning ideas into working products.",
-  currentGoals: [
-    'Master Data Structures & Algorithms',
-    'Build full-stack web applications',
-    'Explore machine learning and AI',
-    'Contribute to open source projects',
-    'Participate in hackathons and competitions',
+    'I am a Computer Science undergraduate focused on building a strong foundation in software engineering. Rather than just memorizing syntax, I believe in understanding how code runs, how data flows, and how real-world applications scale.',
+  philosophy:
+    'My approach revolves around clarity, consistency, and curiosity. Whether debugging an algorithmic edge case or refining a user interface, I aim for solutions that are both technically sound and thoughtfully crafted.',
+  highlights: [
+    {
+      title: 'First-Principles Mindset',
+      desc: 'Focusing on core data structures, algorithms, and how systems execute under the hood.',
+      icon: Cpu,
+    },
+    {
+      title: 'Modern Web Engineering',
+      desc: 'Building responsive, accessible web applications with TypeScript, React, and modular styling.',
+      icon: Layers,
+    },
+    {
+      title: 'Continuous Progression',
+      desc: 'Actively participating in problem-solving practice, technical reading, and open source exploration.',
+      icon: Terminal,
+    },
   ],
   currentlyExploring: [
-    'Artificial Intelligence',
-    'Web Development',
-    'Python',
     'Data Structures & Algorithms',
-    'Open Source',
+    'TypeScript & React Ecosystem',
+    'Linux CLI & Bash Scripting',
+    'Relational Databases & SQL',
+    'RESTful API Architecture',
   ],
 };
 
-// ---- Skills ----
-export interface Skill {
+// ---- Skills Data ----
+export interface SkillItem {
   name: string;
-  icon?: string; // emoji or URL
-  category: string;
+  tag: string;
 }
 
-export const skillCategories = [
-  { id: 'languages', label: 'Programming Languages', icon: Code2 },
-  { id: 'frontend', label: 'Frontend Development', icon: Globe },
-  { id: 'backend', label: 'Backend Development', icon: Code2 },
-  { id: 'ai-ml', label: 'AI & Machine Learning', icon: Brain },
-  { id: 'tools', label: 'Developer Tools', icon: Wrench },
-  { id: 'learning', label: 'Currently Learning', icon: BookOpen },
+export interface SkillCategory {
+  id: string;
+  title: string;
+  subtitle: string;
+  icon: React.ComponentType<{ className?: string }>;
+  skills: SkillItem[];
+}
+
+export const skillCategories: SkillCategory[] = [
+  {
+    id: 'languages',
+    title: 'Programming Languages',
+    subtitle: 'Core languages used in coursework and projects',
+    icon: Code2,
+    skills: [
+      { name: 'Python', tag: 'Scripting & Logic' },
+      { name: 'C / C++', tag: 'Systems & Algorithms' },
+      { name: 'Java', tag: 'OOP & Data Structures' },
+      { name: 'JavaScript (ES6+)', tag: 'Web & Async' },
+      { name: 'TypeScript', tag: 'Type-Safe Applications' },
+    ],
+  },
+  {
+    id: 'frontend',
+    title: 'Frontend & UI Engineering',
+    subtitle: 'Responsive, accessible interface design',
+    icon: Globe,
+    skills: [
+      { name: 'React 19', tag: 'Component Architecture' },
+      { name: 'Tailwind CSS v4', tag: 'Utility-First Styling' },
+      { name: 'HTML5 Semantic', tag: 'Structure & Accessibility' },
+      { name: 'Modern CSS', tag: 'Flexbox, Grid, Custom Props' },
+      { name: 'Motion / Animations', tag: 'Subtle Interactions' },
+    ],
+  },
+  {
+    id: 'tools-core',
+    title: 'Development Tools & Core Concepts',
+    subtitle: 'Essential developer workflow and foundation',
+    icon: Wrench,
+    skills: [
+      { name: 'Git & GitHub', tag: 'Version Control' },
+      { name: 'VS Code & Terminals', tag: 'Workflow' },
+      { name: 'Linux / Unix CLI', tag: 'Command Line' },
+      { name: 'Data Structures', tag: 'Arrays, Trees, Graphs' },
+      { name: 'Vite & Bundlers', tag: 'Modern Build Pipeline' },
+    ],
+  },
+  {
+    id: 'learning',
+    title: 'Currently Exploring',
+    subtitle: 'Active areas of study and experimentation',
+    icon: BookOpen,
+    skills: [
+      { name: 'Node.js & Express', tag: 'Backend Services' },
+      { name: 'SQL & Database Design', tag: 'Data Persistence' },
+      { name: 'REST API Design', tag: 'Client-Server Architecture' },
+      { name: 'Testing Principles', tag: 'Quality Assurance' },
+    ],
+  },
 ];
 
-export const skills: Skill[] = [
-  // Programming Languages
-  { name: 'Python', icon: '🐍', category: 'languages' },
-  { name: 'JavaScript', icon: '⚡', category: 'languages' },
-  { name: 'TypeScript', icon: '🔷', category: 'languages' },
-  { name: 'C/C++', icon: '⚙️', category: 'languages' },
-  { name: 'Java', icon: '☕', category: 'languages' },
-
-  // Frontend
-  { name: 'React', icon: '⚛️', category: 'frontend' },
-  { name: 'HTML5', icon: '🌐', category: 'frontend' },
-  { name: 'CSS3', icon: '🎨', category: 'frontend' },
-  { name: 'Tailwind CSS', icon: '💨', category: 'frontend' },
-
-  // Backend
-  { name: 'Node.js', icon: '🟢', category: 'backend' },
-  { name: 'Express.js', icon: '🚂', category: 'backend' },
-
-  // AI & ML
-  { name: 'Machine Learning', icon: '🤖', category: 'ai-ml' },
-  { name: 'NumPy', icon: '🔢', category: 'ai-ml' },
-  { name: 'Pandas', icon: '🐼', category: 'ai-ml' },
-
-  // Tools
-  { name: 'Git & GitHub', icon: '🔀', category: 'tools' },
-  { name: 'VS Code', icon: '💻', category: 'tools' },
-  { name: 'Linux', icon: '🐧', category: 'tools' },
-
-  // Learning
-  { name: 'Next.js', icon: '▲', category: 'learning' },
-  { name: 'Docker', icon: '🐳', category: 'learning' },
-  { name: 'TensorFlow', icon: '🧠', category: 'learning' },
-];
-
-// ---- Projects ----
+// ---- Projects Data ----
 export interface Project {
   id: string;
   title: string;
-  description: string;
-  longDescription?: string;
+  category: string;
+  status: 'In Progress' | 'Academic' | 'Prototype';
+  problem: string;
+  contribution: string;
+  learned: string;
   techStack: string[];
-  image?: string; // URL to preview image
   githubUrl?: string;
   liveUrl?: string;
-  featured?: boolean;
-  status: 'completed' | 'in-progress' | 'planned';
 }
 
 export const projects: Project[] = [
   {
-    id: 'project-1',
-    title: 'Project One',
-    description:
-      'A brief description of your first project. Replace this with your actual project details.',
-    longDescription:
-      'A more detailed description of the project, its goals, the challenges you faced, and what you learned from building it.',
-    techStack: ['React', 'TypeScript', 'Tailwind CSS'],
-    githubUrl: '#',
-    liveUrl: '#',
-    featured: true,
-    status: 'completed',
+    id: 'dev-command-centre',
+    title: 'Developer Command Centre Portfolio',
+    category: 'Systems & Web Application',
+    status: 'In Progress',
+    problem:
+      'Many developer portfolios rely on generic, bloated templates that mask the developer’s technical mindset and lack performance consciousness.',
+    contribution:
+      'Designed and engineered this custom dark command-centre portfolio from scratch using React, TypeScript, Tailwind CSS v4, and a lightweight Matrix canvas. Implemented full keyboard navigation, accessible theme contrast, and reduced-motion controls.',
+    learned:
+      'Mastered Tailwind v4 CSS-first theming, canvas animation optimization with requestAnimationFrame, and accessible component structuring.',
+    techStack: ['React', 'TypeScript', 'Tailwind CSS v4', 'Canvas API', 'Vite'],
+    githubUrl: 'https://github.com',
   },
   {
-    id: 'project-2',
-    title: 'Project Two',
-    description:
-      'A brief description of your second project. Replace this with your actual project details.',
-    longDescription:
-      'A more detailed description of the project, its goals, the challenges you faced, and what you learned from building it.',
-    techStack: ['Python', 'Machine Learning', 'Flask'],
-    githubUrl: '#',
-    featured: true,
-    status: 'completed',
+    id: 'algorithm-visualizer',
+    title: 'Algorithm & Data Structure Visualizer',
+    category: 'Educational Engineering Tool',
+    status: 'In Progress',
+    problem:
+      'Understanding the step-by-step behavior of sorting (Quicksort, Mergesort) and graph algorithms is difficult through static textbook diagrams.',
+    contribution:
+      'Developing an interactive visualization tool that step-traces algorithm states, color-codes partition pointers, and allows variable playback speeds.',
+    learned:
+      'Deepened comprehension of asynchronous state queues, algorithmic invariants, and rendering optimization during rapid state updates.',
+    techStack: ['TypeScript', 'React', 'Tailwind CSS', 'Algorithms'],
+    githubUrl: 'https://github.com',
   },
   {
-    id: 'project-3',
-    title: 'Project Three',
-    description:
-      'A brief description of your third project. Replace this with your actual project details.',
-    longDescription:
-      'A more detailed description of the project, its goals, the challenges you faced, and what you learned from building it.',
-    techStack: ['Node.js', 'Express', 'MongoDB'],
-    githubUrl: '#',
-    liveUrl: '#',
-    featured: false,
-    status: 'in-progress',
+    id: 'student-task-system',
+    title: 'Coursework & Task Management System',
+    category: 'Productivity Application',
+    status: 'Academic',
+    problem:
+      'Students frequently balance overlapping assignment deadlines across subjects with clunky spreadsheets or complex SaaS tools.',
+    contribution:
+      'Built a focused lightweight student planner with category tagging, priority filtering, and resilient browser-local state storage.',
+    learned:
+      'Gained practical experience with clean component state lifting, localStorage serialization, and form validation constraints.',
+    techStack: ['JavaScript', 'HTML5', 'CSS3', 'Storage API'],
   },
 ];
+
 
 // ---- Journey / Timeline ----
 export interface JourneyItem {
@@ -175,7 +229,7 @@ export interface JourneyItem {
   date: string;
   title: string;
   description: string;
-  icon: string; // emoji
+  icon: string;
   type: 'education' | 'project' | 'achievement' | 'learning';
 }
 
@@ -184,107 +238,24 @@ export const journeyItems: JourneyItem[] = [
     id: 'j1',
     date: '2024',
     title: 'Started B.Tech Journey',
-    description:
-      'Began my Computer Science & Engineering degree with a specialization in AI & Machine Learning.',
+    description: 'Began Computer Science & Engineering undergraduate studies.',
     icon: '🎓',
     type: 'education',
   },
   {
     id: 'j2',
     date: '2024',
-    title: 'First Lines of Code',
-    description:
-      'Wrote my first programs in Python and C, discovering the joy of problem-solving through code.',
+    title: 'Core Fundamentals',
+    description: 'Studied algorithmic problem solving, C, and Python data structures.',
     icon: '💻',
     type: 'learning',
   },
   {
     id: 'j3',
-    date: '2024',
-    title: 'Exploring Web Development',
-    description:
-      'Built my first websites using HTML, CSS, and JavaScript. Fell in love with creating interactive experiences.',
-    icon: '🌐',
-    type: 'learning',
-  },
-  {
-    id: 'j4',
     date: '2025',
-    title: 'Diving into React & Modern Tools',
-    description:
-      'Started building more complex applications with React, TypeScript, and modern development tools.',
-    icon: '⚛️',
+    title: 'Modern Web Engineering',
+    description: 'Developed interactive applications with React, TypeScript, and modern tooling.',
+    icon: '⚡',
     type: 'project',
   },
-  {
-    id: 'j5',
-    date: '2025',
-    title: 'AI & Machine Learning Exploration',
-    description:
-      'Began exploring artificial intelligence and machine learning concepts, building first ML models.',
-    icon: '🤖',
-    type: 'learning',
-  },
-  {
-    id: 'j6',
-    date: '2025',
-    title: 'Open Source & Community',
-    description:
-      'Started contributing to open-source projects and engaging with the developer community.',
-    icon: '🌟',
-    type: 'achievement',
-  },
 ];
-
-// ---- Beyond Academics ----
-export interface BeyondItem {
-  title: string;
-  description: string;
-  icon: string;
-}
-
-export const beyondAcademics: BeyondItem[] = [
-  {
-    title: 'Hackathons',
-    description:
-      'Participating in hackathons to challenge myself, collaborate with others, and build under pressure.',
-    icon: '🏆',
-  },
-  {
-    title: 'Open Source',
-    description:
-      'Contributing to open-source projects and learning from the global developer community.',
-    icon: '🌍',
-  },
-  {
-    title: 'AI Experiments',
-    description:
-      'Experimenting with AI tools and models to understand the future of technology.',
-    icon: '🧪',
-  },
-  {
-    title: 'Side Projects',
-    description:
-      'Building side projects to explore new ideas and technologies beyond the classroom.',
-    icon: '🚀',
-  },
-  {
-    title: 'Tech Exploration',
-    description:
-      'Staying up to date with emerging technologies and development trends.',
-    icon: '🔭',
-  },
-  {
-    title: 'Learning by Doing',
-    description:
-      'Believing that the best way to learn is through hands-on implementation and real projects.',
-    icon: '🛠️',
-  },
-];
-
-// ---- GitHub ----
-export const githubData = {
-  username: 'yourusername', // Replace with your GitHub username
-  profileUrl: 'https://github.com/yourusername',
-};
-

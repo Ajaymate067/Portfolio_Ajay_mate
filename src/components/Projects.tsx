@@ -1,326 +1,215 @@
-'use client';
-
-import { useState, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Code2, ExternalLink, Github, Star, X } from 'lucide-react';
+import React, { useState } from 'react';
 import SectionHeading from '@/components/ui/SectionHeading';
-import { projects } from '@/data/portfolio';
-import type { Project } from '@/data/portfolio';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.12 },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-function StatusBadge({ status }: { status: Project['status'] }) {
-  const config = {
-    completed: {
-      bg: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-      label: 'Completed',
-    },
-    'in-progress': {
-      bg: 'bg-blue-50 text-blue-700 border-blue-200',
-      label: 'In Progress',
-    },
-    planned: {
-      bg: 'bg-gray-50 text-gray-600 border-gray-200',
-      label: 'Planned',
-    },
-  };
-
-  const { bg, label } = config[status];
-
-  return (
-    <span className={`inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full border ${bg}`}>
-      {label}
-    </span>
-  );
-}
-
-function ProjectCard({
-  project,
-  onOpen,
-}: {
-  project: Project;
-  onOpen: (project: Project) => void;
-}) {
-  return (
-    <motion.div
-      variants={cardVariants}
-      whileHover={{ y: -4 }}
-      onClick={() => onOpen(project)}
-      className="bg-white rounded-2xl border border-border overflow-hidden group cursor-pointer hover:shadow-xl transition-shadow duration-500"
-    >
-      {/* Image Area */}
-      <div className="h-48 bg-gradient-to-br from-secondary-bg to-primary-blue/5 relative overflow-hidden">
-        {project.image ? (
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-            <Code2 className="w-12 h-12 text-primary-blue/30" />
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="p-6">
-        {/* Badges */}
-        <div className="flex items-center gap-2 mb-3">
-          {project.featured && (
-            <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-              <Star className="w-3 h-3 fill-current" />
-              Featured
-            </span>
-          )}
-          <StatusBadge status={project.status} />
-        </div>
-
-        {/* Title */}
-        <h3 className="font-display text-xl font-bold text-deep-navy group-hover:text-primary-blue transition-colors duration-300">
-          {project.title}
-        </h3>
-
-        {/* Description */}
-        <p className="text-text-secondary text-sm mt-2 line-clamp-2">
-          {project.description}
-        </p>
-
-        {/* Tech Stack */}
-        <div className="flex flex-wrap gap-2 mt-4">
-          {project.techStack.map((tech) => (
-            <span
-              key={tech}
-              className="bg-secondary-bg text-primary-blue text-xs px-2.5 py-1 rounded-full font-medium"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        {/* Links */}
-        {(project.githubUrl || project.liveUrl) && (
-          <div className="flex items-center gap-3 mt-5 pt-4 border-t border-border">
-            {project.githubUrl && (
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-text-secondary hover:text-deep-navy transition-colors duration-200"
-              >
-                <Github className="w-4 h-4" />
-                Code
-              </a>
-            )}
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-blue hover:text-accent-blue transition-colors duration-200"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Live Demo
-              </a>
-            )}
-          </div>
-        )}
-      </div>
-    </motion.div>
-  );
-}
-
-function ProjectModal({
-  project,
-  onClose,
-}: {
-  project: Project;
-  onClose: () => void;
-}) {
-  // Close on Escape key
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleEsc);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', handleEsc);
-      document.body.style.overflow = '';
-    };
-  }, [onClose]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
-      onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-deep-navy/40 backdrop-blur-sm"
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto"
-      >
-        {/* Modal Header Image */}
-        <div className="h-56 bg-gradient-to-br from-secondary-bg to-primary-blue/10 relative overflow-hidden rounded-t-2xl">
-          {project.image ? (
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <Code2 className="w-16 h-16 text-primary-blue/25" />
-            </div>
-          )}
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm border border-border flex items-center justify-center text-text-secondary hover:text-deep-navy hover:bg-white transition-all duration-200 shadow-sm"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Modal Content */}
-        <div className="p-6 sm:p-8">
-          {/* Badges */}
-          <div className="flex items-center gap-2 mb-4">
-            {project.featured && (
-              <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-                <Star className="w-3 h-3 fill-current" />
-                Featured
-              </span>
-            )}
-            <StatusBadge status={project.status} />
-          </div>
-
-          {/* Title */}
-          <h3 className="font-display text-2xl sm:text-3xl font-bold text-deep-navy">
-            {project.title}
-          </h3>
-
-          {/* Description */}
-          <p className="text-text-secondary mt-4 leading-relaxed">
-            {project.longDescription || project.description}
-          </p>
-
-          {/* Tech Stack */}
-          <div className="mt-6">
-            <h4 className="text-sm font-semibold text-deep-navy uppercase tracking-wider mb-3">
-              Tech Stack
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {project.techStack.map((tech) => (
-                <span
-                  key={tech}
-                  className="bg-secondary-bg text-primary-blue text-sm px-3 py-1.5 rounded-full font-medium border border-border"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Links */}
-          {(project.githubUrl || project.liveUrl) && (
-            <div className="flex flex-wrap items-center gap-3 mt-8 pt-6 border-t border-border">
-              {project.githubUrl && (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-xl bg-deep-navy text-white hover:bg-deep-navy/90 transition-colors duration-200"
-                >
-                  <Github className="w-4 h-4" />
-                  View on GitHub
-                </a>
-              )}
-              {project.liveUrl && (
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-xl bg-primary-blue text-white hover:bg-primary-blue/90 transition-colors duration-200"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Live Demo
-                </a>
-              )}
-            </div>
-          )}
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
+import { projects, Project } from '@/data/portfolio';
+import { ArrowUpRight, Clock, Check, X } from 'lucide-react';
+import { GithubIcon } from '@/components/ui/Icons';
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const handleOpen = useCallback((project: Project) => {
-    setSelectedProject(project);
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setSelectedProject(null);
-  }, []);
-
   return (
-    <section id="projects" className="section-padding bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="projects" className="section-wrapper-editorial bg-[#080808] border-b border-[#292629]">
+      <div className="mx-auto max-w-[1280px]">
+        {/* Section Heading with 02 / SELECTED WORK */}
         <SectionHeading
-          label="Portfolio"
-          title="Things I've Been Building"
-          subtitle="Projects I've worked on — from web apps to AI experiments."
+          idPrefix="02"
+          label="SELECTED WORK"
+          title="ENGINEERING PROJECTS & SYSTEMS"
+          subtitle="Real projects developed through coursework and self-directed engineering practice. Documented with problem statements, individual contributions, and verified technologies."
         />
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
-          variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {projects.map((project) => (
-            <ProjectCard
+        {/* Project Cards Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {projects.map((project, idx) => (
+            <div
               key={project.id}
-              project={project}
-              onOpen={handleOpen}
-            />
+              className="editorial-panel flex flex-col justify-between p-6 sm:p-7 relative group transition-all duration-300 hover:-translate-y-1 hover:border-[#FF453A]/60 hover:shadow-[0_8px_28px_rgba(255,69,58,0.14)]"
+            >
+              {/* Corner Brackets */}
+              <div className="corner-bracket corner-bracket-tl" />
+              <div className="corner-bracket corner-bracket-tr" />
+              <div className="corner-bracket corner-bracket-bl" />
+              <div className="corner-bracket corner-bracket-br" />
+
+              <div>
+                {/* Top Row: Project Index & Category */}
+                <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-[#292629]">
+                  <span className="font-mono text-xs font-bold text-[#FF453A]">
+                    PROJ. 0{idx + 1}
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-[#AAA6A3] bg-[#080808] px-2 py-0.5 border border-[#292629]">
+                    {project.status}
+                  </span>
+                </div>
+
+                {/* Project Title */}
+                <h3
+                  className="font-display font-bold text-xl sm:text-2xl text-[#F2F0EB] group-hover:text-[#FF453A] transition-colors mb-3 leading-snug tracking-tight"
+                  style={{ fontFamily: "'Barlow Condensed', 'Anton', sans-serif" }}
+                >
+                  {project.title}
+                </h3>
+
+                {/* Subtitle / Category */}
+                <div className="font-mono text-[11px] text-[#AAA6A3] mb-4 uppercase tracking-wider">
+                  {project.category}
+                </div>
+
+                {/* Problem Statement */}
+                <div className="mb-4">
+                  <span className="font-mono text-[11px] text-[#FF453A] block mb-1 uppercase tracking-wider font-semibold">
+                    The Problem:
+                  </span>
+                  <p className="text-xs sm:text-sm text-[#AAA6A3] leading-relaxed line-clamp-3">
+                    {project.problem}
+                  </p>
+                </div>
+
+                {/* Contribution */}
+                <div className="mb-5 p-3.5 bg-[#080808] border border-[#292629]">
+                  <span className="font-mono text-[10px] text-[#FF453A] block mb-1 uppercase tracking-wider font-semibold">
+                    // Contribution
+                  </span>
+                  <p className="text-xs text-[#F2F0EB] leading-relaxed line-clamp-3">
+                    {project.contribution}
+                  </p>
+                </div>
+              </div>
+
+              {/* Bottom: Tech Stack & Actions */}
+              <div>
+                <div className="flex flex-wrap gap-1.5 mb-5 pt-3 border-t border-[#292629]">
+                  {project.techStack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="font-mono text-[11px] px-2 py-0.5 bg-[#18181b] text-[#AAA6A3] border border-[#292629]"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-between gap-3 pt-3 border-t border-[#292629]">
+                  <button
+                    onClick={() => setSelectedProject(project)}
+                    className="font-mono text-xs text-[#FF453A] hover:underline flex items-center gap-1 font-semibold tracking-wider uppercase group/btn focus-visible:ring-1 focus-visible:ring-[#FF453A] rounded px-1"
+                  >
+                    <span>View Details</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                  </button>
+
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#AAA6A3] hover:text-[#FF453A] transition-colors p-1.5"
+                      aria-label={`${project.title} Source Code`}
+                    >
+                      <GithubIcon className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
 
-      {/* Project Detail Modal */}
-      <AnimatePresence>
-        {selectedProject && (
-          <ProjectModal project={selectedProject} onClose={handleClose} />
-        )}
-      </AnimatePresence>
+      {/* Case Study Modal */}
+      {selectedProject && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="case-study-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+          onClick={() => setSelectedProject(null)}
+        >
+          <div
+            className="editorial-panel max-w-2xl w-full p-6 sm:p-8 bg-[#111113] border border-[#FF453A]/60 max-h-[85vh] overflow-y-auto shadow-2xl relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="corner-bracket corner-bracket-tl" />
+            <div className="corner-bracket corner-bracket-tr" />
+            <div className="corner-bracket corner-bracket-bl" />
+            <div className="corner-bracket corner-bracket-br" />
+
+            {/* Modal Header */}
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#292629]">
+              <div className="font-mono text-xs text-[#FF453A] uppercase tracking-wider flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-[#FF453A]" />
+                <span>CASE_STUDY: {selectedProject.id}</span>
+              </div>
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="font-mono text-xs text-[#AAA6A3] hover:text-[#FF453A] flex items-center gap-1 uppercase"
+                aria-label="Close Case Study"
+              >
+                <span>CLOSE</span>
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <h3
+              id="case-study-title"
+              className="font-display font-bold text-2xl sm:text-3xl text-[#F2F0EB] mb-2 uppercase"
+              style={{ fontFamily: "'Barlow Condensed', 'Anton', sans-serif" }}
+            >
+              {selectedProject.title}
+            </h3>
+
+            <div className="font-mono text-xs text-[#AAA6A3] mb-6">
+              Category: {selectedProject.category} · Status: {selectedProject.status}
+            </div>
+
+            {/* Modal Content Sections */}
+            <div className="space-y-5 text-sm">
+              <div>
+                <h4 className="font-mono text-xs text-[#FF453A] uppercase tracking-wider mb-1.5 font-semibold">
+                  01. The Problem
+                </h4>
+                <p className="text-[#F2F0EB] leading-relaxed bg-[#080808] p-4 border border-[#292629]">
+                  {selectedProject.problem}
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-mono text-xs text-[#FF453A] uppercase tracking-wider mb-1.5 font-semibold">
+                  02. Individual Contribution
+                </h4>
+                <p className="text-[#F2F0EB] leading-relaxed bg-[#080808] p-4 border border-[#292629]">
+                  {selectedProject.contribution}
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-mono text-xs text-[#FF453A] uppercase tracking-wider mb-1.5 font-semibold">
+                  03. Technical Learnings
+                </h4>
+                <p className="text-[#F2F0EB] leading-relaxed bg-[#080808] p-4 border border-[#292629]">
+                  {selectedProject.learned}
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-mono text-xs text-[#FF453A] uppercase tracking-wider mb-1.5 font-semibold">
+                  04. Stack
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.techStack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="font-mono text-xs px-3 py-1 bg-[#080808] border border-[#292629] text-[#F2F0EB]"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

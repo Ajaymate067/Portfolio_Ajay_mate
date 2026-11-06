@@ -1,293 +1,229 @@
-import { motion, type Variants } from 'framer-motion';
-import { ChevronDown, Download, ExternalLink } from 'lucide-react';
+import React from 'react';
+import { ArrowRight, Mail, ArrowUpRight } from 'lucide-react';
 import { personalInfo, socialLinks } from '@/data/portfolio';
-import { useMousePosition } from '@/hooks/useAnimations';
-
-// ---- Animation config ----
-const ease = [0.22, 1, 0.36, 1] as const;
-
-const containerVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.3 },
-  },
-};
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease },
-  },
-};
-
-const scaleIn: Variants = {
-  hidden: { opacity: 0, scale: 0.92 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.9, ease },
-  },
-};
-
-// ---- Code editor lines ----
-const codeLines = [
-  { text: 'const developer = {', indent: 0, color: 'text-primary-blue' },
-  { text: 'name:', indent: 1, color: 'text-accent-blue', value: `"${personalInfo.name}"`, valueColor: 'text-emerald-500' },
-  { text: 'passion:', indent: 1, color: 'text-accent-blue', value: '"Building the future"', valueColor: 'text-emerald-500' },
-  { text: 'stack:', indent: 1, color: 'text-accent-blue', value: '["React", "Python", "AI/ML"]', valueColor: 'text-amber-500' },
-  { text: 'learning:', indent: 1, color: 'text-accent-blue', value: 'true', valueColor: 'text-violet-500' },
-  { text: 'coffee:', indent: 1, color: 'text-accent-blue', value: 'Infinity', valueColor: 'text-rose-400' },
-  { text: '};', indent: 0, color: 'text-primary-blue' },
-];
-
-const codeContainerVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.8 },
-  },
-};
-
-const codeLineVariants: Variants = {
-  hidden: { opacity: 0, x: -10 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.5, ease },
-  },
-};
-
-// ---- Floating pills data ----
-const floatingPills = [
-  { label: '⚡ React', className: 'animate-float -top-4 -right-4 md:top-4 md:right-[-2rem]' },
-  { label: '🐍 Python', className: 'animate-float-slow -bottom-2 -left-4 md:bottom-8 md:left-[-2rem]' },
-  { label: '🤖 AI/ML', className: 'animate-float-delayed -top-2 -left-4 md:top-[-1rem] md:left-4' },
-  { label: '🚀 Builder', className: 'animate-float bottom-[-1rem] right-4 md:bottom-[-1.5rem] md:right-8' },
-];
+import FloatingTitle3D from '@/components/ui/FloatingTitle3D';
+import WordReveal from '@/components/ui/WordReveal';
 
 export default function Hero() {
-  const mouse = useMousePosition();
+  const heroNavigationStrip = [
+    { id: '01', label: 'ABOUT', href: '#about' },
+    { id: '02', label: 'PROJECTS', href: '#projects' },
+    { id: '03', label: 'SKILLS', href: '#skills' },
+    { id: '04', label: 'CONTACT', href: '#contact' },
+  ];
+
+  const quickIndex = [
+    {
+      num: '01',
+      title: 'ABOUT',
+      desc: 'Computer science foundation, systems mindset, and engineering principles.',
+      href: '#about',
+    },
+    {
+      num: '02',
+      title: 'SELECTED WORK',
+      desc: 'Exploration in data structures, algorithms, and responsive web applications.',
+      href: '#projects',
+    },
+    {
+      num: '03',
+      title: 'CURRENTLY LEARNING',
+      desc: 'Deep diving into backend architecture, SQL systems, and clean interfaces.',
+      href: '#skills',
+    },
+  ];
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center overflow-hidden bg-primary-bg"
+      className="relative min-h-[92vh] flex flex-col justify-between overflow-hidden bg-[#080808] pt-28 pb-8 lg:pt-36 lg:pb-12"
     >
-      {/* ---- Background decorative orbs ---- */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute -top-32 -left-32 h-[480px] w-[480px] rounded-full bg-primary-blue/[0.06] blur-3xl" />
-        <div className="absolute top-1/3 right-[-10%] h-[400px] w-[400px] rounded-full bg-accent-blue/[0.08] blur-3xl" />
-        <div className="absolute bottom-[-5%] left-1/4 h-[360px] w-[360px] rounded-full bg-primary-blue/[0.05] blur-3xl" />
-      </div>
+      {/* ============================================================
+          HUGE FLOATING 3D "PORTFOLIO" TITLE
+          Layered depth, perspective floating animation, subtle tilt
+          ============================================================ */}
+      <FloatingTitle3D />
 
-      {/* ---- Subtle grid ---- */}
-      <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden />
-
-      {/* ---- Content ---- */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-24 sm:px-8 lg:px-12">
-        <div className="flex flex-col items-center gap-16 lg:flex-row lg:items-center lg:gap-12 xl:gap-20">
-          {/* ========== LEFT SIDE ========== */}
-          <motion.div
-            className="flex w-full flex-col lg:w-1/2"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {/* Availability badge */}
-            <motion.div variants={fadeUp} className="mb-6">
-              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-white/80 px-4 py-1.5 text-xs font-medium tracking-wide text-text-secondary backdrop-blur-sm">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+      {/* ============================================================
+          MAIN THREE-COLUMN EDITORIAL CONTAINER
+          ============================================================ */}
+      <div className="relative z-10 mx-auto w-full max-w-[1280px] px-5 sm:px-8 my-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+          
+          {/* ================= LEFT COLUMN ================= */}
+          <div className="lg:col-span-5 flex flex-col justify-between items-start text-left">
+            <div>
+              {/* Intro Label */}
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-2 h-2 bg-[#FF453A]" />
+                <span className="font-mono text-xs uppercase tracking-widest text-[#AAA6A3]">
+                  Hello, I’m
                 </span>
-                OPEN TO LEARNING &amp; COLLABORATION
-              </span>
-            </motion.div>
+              </div>
 
-            {/* Main heading */}
-            <motion.h1
-              variants={fadeUp}
-              className="font-display text-5xl leading-[1.1] font-bold tracking-tight text-text-primary sm:text-6xl lg:text-7xl"
-            >
-              Building{' '}
-              <span className="gradient-text">Ideas</span>.
-              <br />
-              Exploring{' '}
-              <span className="gradient-text">Possibilities</span>.
-            </motion.h1>
+              {/* Solid Red Highlight Box with Large White Condensed Typography */}
+              <div className="inline-block bg-[#FF453A] px-3.5 py-1.5 sm:px-4 sm:py-2 mb-4 shadow-lg shadow-[#FF453A]/20">
+                <h1
+                  className="font-anton text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] text-white tracking-tight uppercase leading-none"
+                  style={{ fontFamily: "'Anton', 'Barlow Condensed', sans-serif" }}
+                >
+                  AJAY MATE.
+                </h1>
+              </div>
 
-            {/* Description */}
-            <motion.p
-              variants={fadeUp}
-              className="mt-6 max-w-lg text-lg leading-relaxed text-text-secondary"
-            >
-              {personalInfo.description}
-            </motion.p>
+              {/* Subtitle / Role */}
+              <div className="font-mono text-xs sm:text-sm text-[#F2F0EB] font-semibold tracking-wider uppercase mb-5">
+                CSE STUDENT / ASPIRING SOFTWARE ENGINEER
+              </div>
 
-            {/* Buttons */}
-            <motion.div
-              variants={fadeUp}
-              className="mt-8 flex flex-wrap items-center gap-4"
-            >
-              <a
-                href="#projects"
-                className="inline-flex items-center gap-2 rounded-full bg-primary-blue px-7 py-3.5 font-semibold text-white shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-primary-blue/25 hover:brightness-110 active:scale-[0.97]"
-              >
-                Explore My Work
-                <ExternalLink className="h-4 w-4" />
-              </a>
-              <a
-                href="#contact"
-                className="inline-flex items-center rounded-full border-2 border-border px-7 py-3.5 font-semibold text-text-primary transition-all duration-300 hover:border-primary-blue hover:text-primary-blue active:scale-[0.97]"
-              >
-                Let&apos;s Connect
-              </a>
-              <a
-                href={personalInfo.resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-2 py-2 text-sm font-medium text-text-secondary transition-colors duration-200 hover:text-primary-blue"
-              >
-                <Download className="h-4 w-4" />
-                Download Resume
-              </a>
-            </motion.div>
+              {/* Word-by-Word Scroll Reveal Introduction */}
+              <WordReveal
+                tag="p"
+                text="Computer Science & Engineering undergraduate focused on core data structures, algorithmic reasoning, and building modern, reliable web applications. Committed to writing clean, purposeful code from first principles."
+                className="text-sm sm:text-base text-[#AAA6A3] leading-relaxed max-w-lg mb-8"
+              />
 
-            {/* Social links */}
-            <motion.div
-              variants={fadeUp}
-              className="mt-8 flex items-center gap-3"
-            >
-              {socialLinks
-                .filter((s) => s.name === 'GitHub' || s.name === 'LinkedIn')
-                .map((link) => {
-                  const Icon = link.icon;
-                  return (
-                    <a
-                      key={link.name}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={link.name}
-                      className="group flex h-10 w-10 items-center justify-center rounded-full border border-border bg-white/70 text-text-secondary backdrop-blur-sm transition-all duration-300 hover:border-primary-blue hover:text-primary-blue hover:shadow-md"
-                    >
-                      <Icon className="h-[18px] w-[18px] transition-transform duration-300 group-hover:scale-110" />
-                    </a>
-                  );
-                })}
-              <span className="ml-1 text-xs text-text-secondary/60">
-                Follow my journey
-              </span>
-            </motion.div>
-          </motion.div>
+              {/* Two Rectangular Action Buttons with arrow movement */}
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                <a href="#projects" className="btn-editorial-primary group w-full sm:w-auto">
+                  <span>View Projects</span>
+                  <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+                </a>
 
-          {/* ========== RIGHT SIDE ========== */}
-          <motion.div
-            className="relative flex w-full items-center justify-center lg:w-1/2"
-            variants={scaleIn}
-            initial="hidden"
-            animate="visible"
-            style={{
-              transform: `translate(${mouse.x * 8}px, ${mouse.y * 6}px)`,
-            }}
-          >
-            {/* Gradient orbs behind card */}
-            <div className="pointer-events-none absolute inset-0" aria-hidden>
-              <div className="absolute top-1/2 left-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-blue/20 blur-3xl" />
-              <div className="absolute top-[20%] right-[10%] h-40 w-40 rounded-full bg-accent-blue/15 blur-2xl" />
+                <a href="#contact" className="btn-editorial-secondary group w-full sm:w-auto">
+                  <Mail className="w-4 h-4 text-[#FF453A]" />
+                  <span>Contact Me</span>
+                </a>
+              </div>
             </div>
 
-            {/* Floating pills */}
-            {floatingPills.map((pill) => (
-              <div
-                key={pill.label}
-                className={`absolute z-20 ${pill.className}`}
-              >
-                <div className="glass rounded-full px-3.5 py-1.5 text-xs font-medium text-text-primary shadow-sm">
-                  {pill.label}
+            {/* Social quick links */}
+            <div className="mt-8 pt-5 border-t border-[#292629] w-full flex items-center gap-4 text-xs font-mono text-[#AAA6A3]">
+              <span className="text-[#666362] uppercase tracking-wider text-[11px]">Channels:</span>
+              {socialLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 hover:text-[#FF453A] transition-colors py-1"
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span>{link.name}</span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ================= CENTRE COLUMN (PROMINENT PORTRAIT PANEL) ================= */}
+          <div className="lg:col-span-4 flex items-center justify-center">
+            <div className="relative w-full max-w-[380px] aspect-[4/5] bg-gradient-to-b from-[#FF453A] to-[#C92A20] p-4 flex flex-col justify-between border border-[#FF453A]/80 shadow-2xl shadow-[#FF453A]/25">
+              
+              {/* Technical Corner Brackets */}
+              <div className="corner-bracket corner-bracket-tl !border-white" />
+              <div className="corner-bracket corner-bracket-tr !border-white" />
+              <div className="corner-bracket corner-bracket-bl !border-white" />
+              <div className="corner-bracket corner-bracket-br !border-white" />
+
+              {/* Top Technical Metadata */}
+              <div className="flex items-center justify-between font-mono text-[10px] text-white/90 tracking-widest uppercase border-b border-white/20 pb-2">
+                <span>// ID. 2026_AM</span>
+                <span>STATUS: ACTIVE</span>
+              </div>
+
+              {/* Central Typographic Monogram Portrait Fallback */}
+              <div className="flex-1 flex flex-col items-center justify-center text-center my-4 relative">
+                <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none select-none">
+                  <span className="font-anton text-[12rem] text-black">AM</span>
+                </div>
+                
+                <div
+                  className="font-anton text-7xl sm:text-8xl md:text-9xl text-white tracking-tighter leading-none drop-shadow-md select-none"
+                  style={{ fontFamily: "'Anton', 'Barlow Condensed', sans-serif" }}
+                >
+                  AM
+                </div>
+                
+                <div className="mt-2 text-xs font-mono font-bold tracking-widest text-black bg-white px-2 py-0.5 uppercase">
+                  ENGINEERING PORTFOLIO
                 </div>
               </div>
-            ))}
 
-            {/* Main glass card — code editor */}
-            <div className="glass relative z-10 w-full max-w-md rounded-2xl p-6 shadow-xl sm:p-8">
-              {/* Title bar */}
-              <div className="mb-4 flex items-center gap-2">
-                <span className="h-3 w-3 rounded-full bg-rose-400" />
-                <span className="h-3 w-3 rounded-full bg-amber-400" />
-                <span className="h-3 w-3 rounded-full bg-emerald-400" />
-                <span className="ml-2 flex-1 text-center text-[11px] font-medium text-text-secondary/50">
-                  developer.ts
-                </span>
+              {/* Bottom Caption Bar */}
+              <div className="border-t border-white/20 pt-2 flex items-center justify-between font-mono text-[11px] text-white">
+                <span className="font-bold tracking-wider">AJAY MATE / PORTFOLIO</span>
+                <span className="text-white/80">01</span>
               </div>
-
-              {/* Code lines */}
-              <motion.div
-                className="font-mono text-sm leading-7 select-none"
-                variants={codeContainerVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                {codeLines.map((line, i) => (
-                  <motion.div
-                    key={i}
-                    variants={codeLineVariants}
-                    className="flex"
-                    style={{ paddingLeft: `${line.indent * 1.25}rem` }}
-                  >
-                    {/* Line number */}
-                    <span className="mr-4 inline-block w-4 text-right text-text-secondary/30 text-xs leading-7">
-                      {i + 1}
-                    </span>
-
-                    <span className={line.color}>{line.text}</span>
-                    {line.value && (
-                      <>
-                        <span className="text-text-secondary/40">&nbsp;</span>
-                        <span className={line.valueColor}>{line.value}</span>
-                        {i < codeLines.length - 1 && i > 0 && (
-                          <span className="text-text-secondary/40">,</span>
-                        )}
-                      </>
-                    )}
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              {/* Blinking cursor */}
-              <motion.span
-                className="mt-1 inline-block h-4 w-[2px] bg-primary-blue"
-                animate={{ opacity: [1, 0] }}
-                transition={{
-                  duration: 0.8,
-                  repeat: Infinity,
-                  repeatType: 'reverse',
-                  ease: 'easeInOut',
-                }}
-              />
             </div>
-          </motion.div>
-        </div>
+          </div>
 
-        {/* ========== SCROLL INDICATOR ========== */}
-        <motion.div
-          className="mt-16 flex flex-col items-center gap-2 lg:mt-20"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2, duration: 0.8, ease }}
-        >
-          <span className="text-xs font-medium tracking-wider text-text-secondary/60">
-            Scroll to explore
-          </span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <ChevronDown className="h-5 w-5 text-text-secondary/40" />
-          </motion.div>
-        </motion.div>
+          {/* ================= RIGHT COLUMN (NUMBERED SECTION LINKS) ================= */}
+          <div className="md:col-span-2 lg:col-span-3 flex flex-col justify-center">
+            <div className="space-y-0 border-t border-[#292629]">
+              {quickIndex.map((item) => (
+                <a
+                  key={item.num}
+                  href={item.href}
+                  className="group block py-5 border-b border-[#292629] transition-all hover:bg-[#111113] px-2 -mx-2"
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="font-mono text-xs font-bold text-[#FF453A] tracking-wider">
+                      {item.num} / {item.title}
+                    </span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-[#AAA6A3] group-hover:text-[#FF453A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  </div>
+                  <p className="text-xs text-[#AAA6A3] leading-relaxed pr-4">
+                    {item.desc}
+                  </p>
+                </a>
+              ))}
+            </div>
+
+            {/* Availability Indicator */}
+            <div className="mt-6 p-3.5 bg-[#111113] border border-[#292629] flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-[#FF453A] animate-pulse" />
+              <div className="text-xs font-mono text-[#AAA6A3]">
+                <span className="text-[#F2F0EB] font-medium">OPEN FOR COLLABORATION</span>
+                <div className="text-[10px] text-[#666362]">Internships & Technical Roles</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
+
+      {/* ============================================================
+          NARROW STRIP BELOW HERO
+          Working links to About, Projects, Skills, Contact with small
+          section numbers and restrained red indicator.
+          ============================================================ */}
+      <div className="relative z-10 w-full border-y border-[#292629] bg-[#0c0c0e]/90 mt-12">
+        <div className="mx-auto max-w-[1280px] px-5 sm:px-8 py-3.5">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-6 sm:gap-8 font-mono text-xs">
+              {heroNavigationStrip.map((item) => (
+                <a
+                  key={item.id}
+                  href={item.href}
+                  className="group flex items-center gap-2 text-[#AAA6A3] hover:text-[#F2F0EB] transition-colors"
+                >
+                  <span className="text-[#FF453A] font-semibold">{item.id}</span>
+                  <span className="tracking-wider">{item.label}</span>
+                </a>
+              ))}
+            </div>
+
+            <div className="hidden sm:flex items-center gap-2 font-mono text-[11px] text-[#666362]">
+              <span className="w-1.5 h-1.5 bg-[#FF453A]" />
+              <span>SYSTEMS // FRONTEND // ALGORITHMS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </section>
   );
 }

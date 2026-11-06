@@ -1,159 +1,127 @@
-'use client';
-
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
 import SectionHeading from '@/components/ui/SectionHeading';
-import { skills, skillCategories } from '@/data/portfolio';
-import type { Skill } from '@/data/portfolio';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06 },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-const categoryHeaderVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-function SkillCard({ skill }: { skill: Skill }) {
-  return (
-    <motion.div
-      variants={cardVariants}
-      whileHover={{ y: -2 }}
-      className="bg-white rounded-xl border border-border p-4 hover:border-primary-blue/50 hover:shadow-md transition-all duration-300 flex items-center gap-3 cursor-default"
-    >
-      {skill.icon && (
-        <span className="text-2xl leading-none flex-shrink-0">{skill.icon}</span>
-      )}
-      <span className="font-medium text-text-primary text-sm">{skill.name}</span>
-    </motion.div>
-  );
-}
+import { skillCategories } from '@/data/portfolio';
 
 export default function Skills() {
-  const [activeCategory, setActiveCategory] = useState<string>('all');
-
-  const filteredCategories =
-    activeCategory === 'all'
-      ? skillCategories
-      : skillCategories.filter((c) => c.id === activeCategory);
-
-  const getSkillsByCategory = (categoryId: string): Skill[] =>
-    skills.filter((s) => s.category === categoryId);
+  const confirmedCategories = skillCategories.filter((c) => c.id !== 'learning');
+  const learningCategory = skillCategories.find((c) => c.id === 'learning');
 
   return (
-    <section id="skills" className="section-padding bg-grid relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="skills" className="section-wrapper-editorial bg-[#080808] border-b border-[#292629]">
+      <div className="mx-auto max-w-[1280px]">
+        {/* Section Heading */}
         <SectionHeading
-          label="Technologies"
-          title="My Tech Stack"
-          subtitle="Technologies and tools I work with and am currently exploring."
+          idPrefix="03"
+          label="SKILLS & TOOLKIT"
+          title="TECHNICAL COMPETENCIES"
+          subtitle="Honest assessment of languages, frameworks, and developer tools actively used in coursework and personal projects. Grouped by domain without arbitrary percentages."
         />
 
-        {/* Category Filter Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-wrap justify-center gap-2 mb-12"
-        >
-          <button
-            onClick={() => setActiveCategory('all')}
-            className={`px-4 py-2 text-sm font-medium rounded-full border transition-all duration-300 ${
-              activeCategory === 'all'
-                ? 'bg-primary-blue text-white border-primary-blue shadow-md shadow-primary-blue/25'
-                : 'bg-white text-text-secondary border-border hover:border-primary-blue/50 hover:text-primary-blue'
-            }`}
-          >
-            All
-          </button>
-          {skillCategories.map((cat) => {
-            const Icon = cat.icon;
+        {/* Confirmed Skills Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {confirmedCategories.map((category, idx) => {
+            const Icon = category.icon;
             return (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full border transition-all duration-300 ${
-                  activeCategory === cat.id
-                    ? 'bg-primary-blue text-white border-primary-blue shadow-md shadow-primary-blue/25'
-                    : 'bg-white text-text-secondary border-border hover:border-primary-blue/50 hover:text-primary-blue'
-                }`}
+              <div
+                key={category.id}
+                className="editorial-panel p-6 sm:p-7 flex flex-col justify-between"
               >
-                <Icon className="w-3.5 h-3.5" />
-                {cat.label}
-              </button>
+                <div className="corner-bracket corner-bracket-tl" />
+                <div className="corner-bracket corner-bracket-tr" />
+                <div className="corner-bracket corner-bracket-bl" />
+                <div className="corner-bracket corner-bracket-br" />
+
+                <div>
+                  {/* Category Header */}
+                  <div className="flex items-center justify-between gap-3 mb-3 pb-3 border-b border-[#292629]">
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-[#FF453A]" />
+                      <h3
+                        className="font-display font-bold text-lg sm:text-xl text-[#F2F0EB] tracking-tight uppercase"
+                        style={{ fontFamily: "'Barlow Condensed', 'Anton', sans-serif" }}
+                      >
+                        {category.title}
+                      </h3>
+                    </div>
+                    <span className="font-mono text-[10px] text-[#666362]">0{idx + 1}</span>
+                  </div>
+
+                  <p className="text-xs text-[#AAA6A3] mb-5 leading-relaxed">
+                    {category.subtitle}
+                  </p>
+
+                  {/* Skills List */}
+                  <div className="space-y-2">
+                    {category.skills.map((skill, sIdx) => (
+                      <div
+                        key={sIdx}
+                        className="px-3.5 py-2.5 bg-[#080808] border border-[#292629] flex items-center justify-between hover:border-[#FF453A]/50 transition-colors"
+                      >
+                        <span className="text-xs sm:text-sm font-medium text-[#F2F0EB]">
+                          {skill.name}
+                        </span>
+                        <span className="font-mono text-[10px] text-[#AAA6A3]">
+                          {skill.tag}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-5 pt-3 border-t border-[#292629] flex items-center justify-between text-[10px] font-mono text-[#666362]">
+                  <span>DOMAIN: {category.id.toUpperCase()}</span>
+                  <span className="text-[#FF453A]">CONFIRMED</span>
+                </div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
 
-        {/* Skills Grid by Category */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-12"
-          >
-            {filteredCategories.map((category) => {
-              const categorySkills = getSkillsByCategory(category.id);
-              if (categorySkills.length === 0) return null;
+        {/* Distinct "Currently Learning" Row */}
+        {learningCategory && (
+          <div className="editorial-panel p-6 sm:p-7 border border-[#FF453A]/30">
+            <div className="corner-bracket corner-bracket-tl" />
+            <div className="corner-bracket corner-bracket-tr" />
+            <div className="corner-bracket corner-bracket-bl" />
+            <div className="corner-bracket corner-bracket-br" />
 
-              const Icon = category.icon;
-
-              return (
-                <motion.div
-                  key={category.id}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: '-60px' }}
-                  variants={containerVariants}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-3 border-b border-[#292629]">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-[#00F0FF]" />
+                <h3
+                  className="font-display font-bold text-xl text-[#F2F0EB] tracking-tight uppercase"
+                  style={{ fontFamily: "'Barlow Condensed', 'Anton', sans-serif" }}
                 >
-                  <motion.div
-                    variants={categoryHeaderVariants}
-                    className="flex items-center gap-3 mb-6"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-secondary-bg border border-border flex items-center justify-center">
-                      <Icon className="w-5 h-5 text-primary-blue" />
-                    </div>
-                    <h3 className="font-display text-lg font-semibold text-deep-navy">
-                      {category.label}
-                    </h3>
-                    <div className="flex-1 h-px bg-border ml-2" />
-                  </motion.div>
+                  {learningCategory.title}
+                </h3>
+              </div>
+              <span className="font-mono text-xs text-[#00F0FF] uppercase tracking-wider">
+                // ACTIVE STUDY & EXPERIMENTATION
+              </span>
+            </div>
 
-                  <motion.div
-                    variants={containerVariants}
-                    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
-                  >
-                    {categorySkills.map((skill) => (
-                      <SkillCard key={skill.name} skill={skill} />
-                    ))}
-                  </motion.div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </AnimatePresence>
+            <p className="text-xs sm:text-sm text-[#AAA6A3] mb-5 max-w-2xl">
+              {learningCategory.subtitle}. Disciplines and technologies actively being practiced
+              through documentation, coursework, and mini-prototypes.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+              {learningCategory.skills.map((skill, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 bg-[#080808] border border-[#292629] flex flex-col justify-between"
+                >
+                  <span className="text-xs sm:text-sm font-semibold text-[#F2F0EB]">
+                    {skill.name}
+                  </span>
+                  <span className="font-mono text-[10px] text-[#AAA6A3] mt-1">
+                    {skill.tag}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

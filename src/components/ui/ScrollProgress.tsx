@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useScrollProgress } from '@/hooks/useAnimations';
 
@@ -6,12 +7,12 @@ export default function ScrollProgress() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 h-[3px] z-[100] origin-left"
+      className="fixed top-0 left-0 right-0 h-[2.5px] z-[100] origin-left bg-[#FF453A]"
       style={{
         scaleX: progress,
-        background: 'linear-gradient(90deg, #3B82F6, #60A5FA)',
+        boxShadow: '0 0 12px rgba(255, 69, 58, 0.7)',
       }}
+      aria-hidden="true"
     />
   );
 }
-

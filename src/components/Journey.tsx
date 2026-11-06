@@ -37,7 +37,7 @@ function TimelineItem({ item, index }: { item: JourneyItem; index: number }) {
       <motion.div
         initial={{ opacity: 0, x: isLeft ? -50 : 50, y: 20 }}
         animate={isInView ? { opacity: 1, x: 0, y: 0 } : {}}
-        transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
         className={`relative ml-12 md:ml-0 md:w-[calc(50%-2.5rem)] ${
           isLeft ? 'md:pr-0' : 'md:pl-0'
         }`}
